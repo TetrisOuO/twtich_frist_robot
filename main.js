@@ -1,17 +1,20 @@
 const tmi = require("tmi.js");
+require("dotenv").config();
+
+const channel = "jerry_peter";
 
 const client = new tmi.Client({
   options: { debug: true },
   identity: {
-    username: "my_bot_name",
-    password: "oauth:my_bot_token",
+    username: process.env.TWITCH_USER_NAME,
+    password: process.env.TWITCH_OAUTH,
   },
-  channels: ["my_name"],
+  channels: [channel],
 });
 
-client.connect();
+client.connect().catch(console.error);
 
-client.on("message", (channel, tags, message, self) => {
+client.on("message", async (channel, tags, message, self) => {
   // Ignore echoed messages.
   if (self) return;
 
